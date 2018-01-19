@@ -57,7 +57,12 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 }
 
 func (e *Exporter) fetch() (err error) {
-	usageReport, err := cloudinary.GetUsageReport()
+	req, err := cloudinary.GetRequest()
+	if err != nil {
+		return err
+	}
+
+	usageReport, err := cloudinary.GetUsageReport(req)
 	if err != nil {
 		return err
 	}

@@ -38,20 +38,28 @@ func getCredentials() (key, secret, cloudName string, err error) {
 	return key, secret, cloudName, err
 }
 
-func GetUsageReport() (usageReport *UsageReport, err error) {
+func GetRequest() (req *http.Request, err error) {
 	key, secret, cloudName, err := getCredentials()
 	if err != nil {
 		return nil, err
 	}
 
-	rs, err := http.Get(
+	req, err = http.NewRequest(
+		"GET",
 		fmt.Sprintf(
 			"https://%s:%s@api.cloudinary.com/v1_1/%s/usage",
 			key,
 			secret,
 			cloudName,
 		),
+		nil,
 	)
+	return req, err
+}
+
+func GetUsageReport(req *http.Request) (usageReport *UsageReport, err error) {
+	client := http.Client{}
+	rs, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
