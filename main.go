@@ -6,14 +6,14 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/Devex/cloudinary"
+	"github.com/ifosch/cloudinary-exporter/exporter"
 )
 
 func main() {
 	listenAddress := ":9101"
 	log.Println("Starting cloudinary-prom-exporter")
 
-	exporter, err := cloudinary.NewExporter()
+	exporter, err := exporter.NewExporter()
 	if err != nil {
 		log.Fatal(err)
 	}
