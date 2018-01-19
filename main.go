@@ -11,7 +11,7 @@ import (
 
 func main() {
 	listenAddress := ":9101"
-	log.Println("Starting cloudinary-prom-exporter")
+	log.Println("Starting cloudinary-exporter")
 
 	exporter, err := exporter.NewExporter()
 	if err != nil {
