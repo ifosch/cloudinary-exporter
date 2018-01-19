@@ -10,13 +10,37 @@ import (
 
 const ns = "cloudinary"
 
+type ReportDesc struct {
+	Name  string
+	Desc  string
+	Value float64
+}
+
+var ReportDescs = []ReportDesc{
+	ReportDesc{Name: "transformations_usage", Desc: "Transformation usage", Value: 1.0},
+	ReportDesc{Name: "transformations_limit", Desc: "Transformation limit", Value: 1.0},
+	ReportDesc{Name: "transformations_used_percent", Desc: "Transformation used percent", Value: 1.0},
+	ReportDesc{Name: "objects_usage", Desc: "Object usage", Value: 1.0},
+	ReportDesc{Name: "objects_limit", Desc: "Object limit", Value: 1.0},
+	ReportDesc{Name: "objects_used_percent", Desc: "Object used percent", Value: 1.0},
+	ReportDesc{Name: "bandwidth_usage", Desc: "Bandwidth usage", Value: 1.0},
+	ReportDesc{Name: "bandwidth_limit", Desc: "Bandwidth limit", Value: 1.0},
+	ReportDesc{Name: "bandwidth_used_percent", Desc: "Bandwidth used percent", Value: 1.0},
+	ReportDesc{Name: "storage_usage", Desc: "Storage usage", Value: 1.0},
+	ReportDesc{Name: "storage_limit", Desc: "Storage limit", Value: 1.0},
+	ReportDesc{Name: "storage_used_percent", Desc: "Storage used percent", Value: 1.0},
+	ReportDesc{Name: "requests", Desc: "Requests", Value: 1.0},
+	ReportDesc{Name: "resources", Desc: "Resources", Value: 1.0},
+	ReportDesc{Name: "derived_resources", Desc: "Derived resources", Value: 1.0},
+}
+
 type Exporter struct {
 	metrics []prometheus.Gauge
 }
 
 func NewExporter() (*Exporter, error) {
 	metrics := []prometheus.Gauge{}
-	for _, desc := range cloudinary.ReportDescs {
+	for _, desc := range ReportDescs {
 		metricDesc := prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Namespace:   "cloudinary",
@@ -39,7 +63,6 @@ func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 }
 
 func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
-	log.Println("Collect called...")
 	err := e.fetch()
 	if err != nil {
 		log.Fatal(err)
