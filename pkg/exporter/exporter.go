@@ -13,25 +13,25 @@ const ns = "cloudinary"
 type ReportDesc struct {
 	Name  string
 	Desc  string
-	Value float64
+	Value func(cloudinary.UsageReport) float64
 }
 
 var ReportDescs = []ReportDesc{
-	ReportDesc{Name: "transformations_usage", Desc: "Transformation usage", Value: 1.0},
-	ReportDesc{Name: "transformations_limit", Desc: "Transformation limit", Value: 1.0},
-	ReportDesc{Name: "transformations_used_percent", Desc: "Transformation used percent", Value: 1.0},
-	ReportDesc{Name: "objects_usage", Desc: "Object usage", Value: 1.0},
-	ReportDesc{Name: "objects_limit", Desc: "Object limit", Value: 1.0},
-	ReportDesc{Name: "objects_used_percent", Desc: "Object used percent", Value: 1.0},
-	ReportDesc{Name: "bandwidth_usage", Desc: "Bandwidth usage", Value: 1.0},
-	ReportDesc{Name: "bandwidth_limit", Desc: "Bandwidth limit", Value: 1.0},
-	ReportDesc{Name: "bandwidth_used_percent", Desc: "Bandwidth used percent", Value: 1.0},
-	ReportDesc{Name: "storage_usage", Desc: "Storage usage", Value: 1.0},
-	ReportDesc{Name: "storage_limit", Desc: "Storage limit", Value: 1.0},
-	ReportDesc{Name: "storage_used_percent", Desc: "Storage used percent", Value: 1.0},
-	ReportDesc{Name: "requests", Desc: "Requests", Value: 1.0},
-	ReportDesc{Name: "resources", Desc: "Resources", Value: 1.0},
-	ReportDesc{Name: "derived_resources", Desc: "Derived resources", Value: 1.0},
+	ReportDesc{Name: "transformations_usage", Desc: "Transformation usage", Value: cloudinary.TransformationUsage},
+	ReportDesc{Name: "transformations_limit", Desc: "Transformation limit", Value: cloudinary.TransformationLimit},
+	ReportDesc{Name: "transformations_used_percent", Desc: "Transformation used percent", Value: cloudinary.TransformationUsedPercent},
+	ReportDesc{Name: "objects_usage", Desc: "Object usage", Value: cloudinary.ObjectsUsage},
+	ReportDesc{Name: "objects_limit", Desc: "Object limit", Value: cloudinary.ObjectsLimit},
+	ReportDesc{Name: "objects_used_percent", Desc: "Object used percent", Value: cloudinary.ObjectsUsedPercent},
+	ReportDesc{Name: "bandwidth_usage", Desc: "Bandwidth usage", Value: cloudinary.BandwidthUsage},
+	ReportDesc{Name: "bandwidth_limit", Desc: "Bandwidth limit", Value: cloudinary.BandwidthLimit},
+	ReportDesc{Name: "bandwidth_used_percent", Desc: "Bandwidth used percent", Value: cloudinary.BandwidthUsedPercent},
+	ReportDesc{Name: "storage_usage", Desc: "Storage usage", Value: cloudinary.StorageUsage},
+	ReportDesc{Name: "storage_limit", Desc: "Storage limit", Value: cloudinary.StorageLimit},
+	ReportDesc{Name: "storage_used_percent", Desc: "Storage used percent", Value: cloudinary.StorageUsedPercent},
+	ReportDesc{Name: "requests", Desc: "Requests", Value: cloudinary.Requests},
+	ReportDesc{Name: "resources", Desc: "Resources", Value: cloudinary.Resources},
+	ReportDesc{Name: "derived_resources", Desc: "Derived resources", Value: cloudinary.DerivedResources},
 }
 
 type Exporter struct {
@@ -78,27 +78,16 @@ func (e *Exporter) fetch() (err error) {
 		return err
 	}
 
-	usageReport, err := cloudinary.GetUsageReport(req)
+	report, err := cloudinary.GetUsageReport(req)
 	if err != nil {
 		return err
 	}
 
-	e.metrics[0].Set(float64(usageReport.Transformations.Usage))
-	e.metrics[1].Set(float64(usageReport.Transformations.Limit))
-	e.metrics[2].Set(float64(usageReport.Transformations.UsedPercent))
-	e.metrics[3].Set(float64(usageReport.Objects.Usage))
-	e.metrics[4].Set(float64(usageReport.Objects.Limit))
-	e.metrics[5].Set(float64(usageReport.Objects.UsedPercent))
-	e.metrics[6].Set(float64(usageReport.Bandwidth.Usage))
-	e.metrics[7].Set(float64(usageReport.Bandwidth.Limit))
-	e.metrics[8].Set(float64(usageReport.Bandwidth.UsedPercent))
-	e.metrics[9].Set(float64(usageReport.Storage.Usage))
-	e.metrics[10].Set(float64(usageReport.Storage.Limit))
-	e.metrics[11].Set(float64(usageReport.Storage.UsedPercent))
-	e.metrics[12].Set(float64(usageReport.Requests))
-	e.metrics[13].Set(float64(usageReport.Resources))
-	e.metrics[14].Set(float64(usageReport.DerivedResources))
-	log.Println(*usageReport)
+	for i, metric := range ReportDescs {
+		if metric.Value != nil {
+			e.metrics[i].Set(metric.Value(*report))
+		}
+	}
 
 	return nil
 }

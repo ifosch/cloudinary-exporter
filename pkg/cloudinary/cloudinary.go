@@ -74,3 +74,63 @@ func GetUsageReport(req *http.Request) (usageReport *UsageReport, err error) {
 	err = json.Unmarshal(bodyBytes, &usageReport)
 	return usageReport, err
 }
+
+func DerivedResources(usageReport UsageReport) float64 {
+	return float64(usageReport.DerivedResources)
+}
+
+func Resources(usageReport UsageReport) float64 {
+	return float64(usageReport.Resources)
+}
+
+func Requests(usageReport UsageReport) float64 {
+	return float64(usageReport.Requests)
+}
+
+func StorageUsage(usageReport UsageReport) float64 {
+	return float64(usageReport.Storage.Usage)
+}
+
+func StorageLimit(usageReport UsageReport) float64 {
+	return float64(usageReport.Storage.Limit)
+}
+
+func StorageUsedPercent(usageReport UsageReport) float64 {
+	return float64(usageReport.Storage.UsedPercent)
+}
+
+func BandwidthUsage(usageReport UsageReport) float64 {
+	return float64(usageReport.Bandwidth.Usage)
+}
+
+func BandwidthLimit(usageReport UsageReport) float64 {
+	return float64(usageReport.Bandwidth.Limit)
+}
+
+func BandwidthUsedPercent(usageReport UsageReport) float64 {
+	return float64(usageReport.Bandwidth.UsedPercent)
+}
+
+func ObjectsUsage(usageReport UsageReport) float64 {
+	return float64(usageReport.Objects.Usage)
+}
+
+func ObjectsLimit(usageReport UsageReport) float64 {
+	return float64(usageReport.Objects.Limit)
+}
+
+func ObjectsUsedPercent(usageReport UsageReport) float64 {
+	return float64(usageReport.Objects.UsedPercent)
+}
+
+func TransformationUsage(usageReport UsageReport) float64 {
+	return float64(usageReport.Transformations.Usage)
+}
+
+func TransformationLimit(usageReport UsageReport) float64 {
+	return float64(usageReport.Transformations.Limit)
+}
+
+func TransformationUsedPercent(usageReport UsageReport) float64 {
+	return float64(usageReport.Transformations.UsedPercent)
+}
