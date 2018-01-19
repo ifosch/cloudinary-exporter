@@ -1,16 +1,12 @@
 package exporter
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"log"
-	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/Devex/heracles"
-	"github.com/ifosch/cloudinary-exporter/cloudinary"
+	"github.com/ifosch/cloudinary-exporter/pkg/cloudinary"
 )
 
 const ns = "cloudinary"
@@ -61,34 +57,11 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 }
 
 func (e *Exporter) fetch() (err error) {
-	key, secret, cloud_name, err := cloudinary.GetCredentials()
+	usageReport, err := cloudinary.GetUsageReport()
 	if err != nil {
 		return err
 	}
 
-	rs, err := http.Get(
-		fmt.Sprintf(
-			"https://%s:%s@api.cloudinary.com/v1_1/%s/usage",
-			key,
-			secret,
-			cloud_name,
-		),
-	)
-	if err != nil {
-		return err
-	}
-	defer rs.Body.Close()
-
-	bodyBytes, err := ioutil.ReadAll(rs.Body)
-	if err != nil {
-		return err
-	}
-
-	usageReport := new(cloudinary.UsageReport)
-	err = json.Unmarshal(bodyBytes, &usageReport)
-	if err != nil {
-		return err
-	}
 	e.metrics[1].With(nil).Set(float64(usageReport.Transformations.Usage))
 	e.metrics[2].With(nil).Set(float64(usageReport.Transformations.Limit))
 	e.metrics[3].With(nil).Set(float64(usageReport.Transformations.UsedPercent))
@@ -104,7 +77,7 @@ func (e *Exporter) fetch() (err error) {
 	e.metrics[13].With(nil).Set(float64(usageReport.Requests))
 	e.metrics[14].With(nil).Set(float64(usageReport.Resources))
 	e.metrics[15].With(nil).Set(float64(usageReport.DerivedResources))
-	log.Println(usageReport)
+	log.Println(*usageReport)
 
 	return nil
 }

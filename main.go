@@ -6,7 +6,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/ifosch/cloudinary-exporter/exporter"
+	"github.com/ifosch/cloudinary-exporter/pkg/exporter"
 )
 
 func main() {

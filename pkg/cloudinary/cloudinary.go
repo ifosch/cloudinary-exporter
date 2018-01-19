@@ -1,7 +1,11 @@
 package cloudinary
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 	"os"
 )
 
@@ -23,7 +27,7 @@ type UsageReport struct {
 	DerivedResources int64     `json:"derived_resources"`
 }
 
-func GetCredentials() (key, secret, cloud_name string, err error) {
+func getCredentials() (key, secret, cloud_name string, err error) {
 	key = os.Getenv("CLOUDINARY_KEY")
 	secret = os.Getenv("CLOUDINARY_SECRET")
 	cloud_name = os.Getenv("CLOUDINARY_CLOUD_NAME")
@@ -32,4 +36,33 @@ func GetCredentials() (key, secret, cloud_name string, err error) {
 		err = errors.New("No credentials defined")
 	}
 	return key, secret, cloud_name, err
+}
+
+func GetUsageReport() (usageReport *UsageReport, err error) {
+	key, secret, cloud_name, err := getCredentials()
+	if err != nil {
+		return nil, err
+	}
+
+	rs, err := http.Get(
+		fmt.Sprintf(
+			"https://%s:%s@api.cloudinary.com/v1_1/%s/usage",
+			key,
+			secret,
+			cloud_name,
+		),
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rs.Body.Close()
+
+	bodyBytes, err := ioutil.ReadAll(rs.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	usageReport = new(UsageReport)
+	err = json.Unmarshal(bodyBytes, &usageReport)
+	return usageReport, err
 }
