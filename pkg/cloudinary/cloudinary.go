@@ -27,6 +27,29 @@ type UsageReport struct {
 	DerivedResources int64     `json:"derived_resources"`
 }
 
+type ReportDesc struct {
+	Name string
+	Desc string
+}
+
+var ReportDescs = []ReportDesc{
+	ReportDesc{Name: "transformations_usage", Desc: "Transformation usage"},
+	ReportDesc{Name: "transformations_limit", Desc: "Transformation limit"},
+	ReportDesc{Name: "transformations_used_percent", Desc: "Transformation used percent"},
+	ReportDesc{Name: "objects_usage", Desc: "Object usage"},
+	ReportDesc{Name: "objects_limit", Desc: "Object limit"},
+	ReportDesc{Name: "objects_used_percent", Desc: "Object used percent"},
+	ReportDesc{Name: "bandwidth_usage", Desc: "Bandwidth usage"},
+	ReportDesc{Name: "bandwidth_limit", Desc: "Bandwidth limit"},
+	ReportDesc{Name: "bandwidth_used_percent", Desc: "Bandwidth used percent"},
+	ReportDesc{Name: "storage_usage", Desc: "Storage usage"},
+	ReportDesc{Name: "storage_limit", Desc: "Storage limit"},
+	ReportDesc{Name: "storage_used_percent", Desc: "Storage used percent"},
+	ReportDesc{Name: "requests", Desc: "Requests"},
+	ReportDesc{Name: "resources", Desc: "Resources"},
+	ReportDesc{Name: "derived_resources", Desc: "Derived resources"},
+}
+
 func getCredentials() (key, secret, cloudName string, err error) {
 	key = os.Getenv("CLOUDINARY_KEY")
 	secret = os.Getenv("CLOUDINARY_SECRET")
