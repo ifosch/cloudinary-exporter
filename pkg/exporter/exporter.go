@@ -5,32 +5,48 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/Devex/heracles"
 	"github.com/ifosch/cloudinary-exporter/pkg/cloudinary"
 )
 
+type GaugeMetrics map[int]*prometheus.GaugeVec
+
+func NewGaugeMetrics(
+	namespace, name, docString string,
+	labels prometheus.Labels,
+) *prometheus.GaugeVec {
+	return prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Namespace:   namespace,
+			Name:        name,
+			Help:        docString,
+			ConstLabels: labels,
+		},
+		[]string{},
+	)
+}
+
 const ns = "cloudinary"
 
-var cloudinaryMetrics = heracles.GaugeMetrics{
-	1:  heracles.NewGaugeMetrics(ns, "transformations_usage", "Transformations usage", nil),
-	2:  heracles.NewGaugeMetrics(ns, "transformations_limit", "Transformations limit", nil),
-	3:  heracles.NewGaugeMetrics(ns, "transformations_used_percent", "Transformations used percent", nil),
-	4:  heracles.NewGaugeMetrics(ns, "objects_usage", "Objects usage", nil),
-	5:  heracles.NewGaugeMetrics(ns, "objects_limit", "Objects limit", nil),
-	6:  heracles.NewGaugeMetrics(ns, "objects_used_percent", "Objects used percent", nil),
-	7:  heracles.NewGaugeMetrics(ns, "bandwidth_usage", "Bandwidth usage", nil),
-	8:  heracles.NewGaugeMetrics(ns, "bandwidth_limit", "Bandwidth limit", nil),
-	9:  heracles.NewGaugeMetrics(ns, "bandwidth_used_percent", "Bandwidth used percent", nil),
-	10: heracles.NewGaugeMetrics(ns, "storage_usage", "Storage usage", nil),
-	11: heracles.NewGaugeMetrics(ns, "storage_limit", "Storage limit", nil),
-	12: heracles.NewGaugeMetrics(ns, "storage_used_percent", "Storage used percent", nil),
-	13: heracles.NewGaugeMetrics(ns, "requests", "Requests", nil),
-	14: heracles.NewGaugeMetrics(ns, "resources", "Resources", nil),
-	15: heracles.NewGaugeMetrics(ns, "derived_resources", "Derived resources", nil),
+var cloudinaryMetrics = GaugeMetrics{
+	1:  NewGaugeMetrics(ns, "transformations_usage", "Transformations usage", nil),
+	2:  NewGaugeMetrics(ns, "transformations_limit", "Transformations limit", nil),
+	3:  NewGaugeMetrics(ns, "transformations_used_percent", "Transformations used percent", nil),
+	4:  NewGaugeMetrics(ns, "objects_usage", "Objects usage", nil),
+	5:  NewGaugeMetrics(ns, "objects_limit", "Objects limit", nil),
+	6:  NewGaugeMetrics(ns, "objects_used_percent", "Objects used percent", nil),
+	7:  NewGaugeMetrics(ns, "bandwidth_usage", "Bandwidth usage", nil),
+	8:  NewGaugeMetrics(ns, "bandwidth_limit", "Bandwidth limit", nil),
+	9:  NewGaugeMetrics(ns, "bandwidth_used_percent", "Bandwidth used percent", nil),
+	10: NewGaugeMetrics(ns, "storage_usage", "Storage usage", nil),
+	11: NewGaugeMetrics(ns, "storage_limit", "Storage limit", nil),
+	12: NewGaugeMetrics(ns, "storage_used_percent", "Storage used percent", nil),
+	13: NewGaugeMetrics(ns, "requests", "Requests", nil),
+	14: NewGaugeMetrics(ns, "resources", "Resources", nil),
+	15: NewGaugeMetrics(ns, "derived_resources", "Derived resources", nil),
 }
 
 type Exporter struct {
-	metrics heracles.GaugeMetrics
+	metrics GaugeMetrics
 }
 
 func NewExporter() (*Exporter, error) {
