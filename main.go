@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -10,8 +12,16 @@ import (
 	"github.com/ifosch/cloudinary-exporter/pkg/exporter"
 )
 
+func getListenAddress() string {
+	port := flag.Int("p", 9101, "Port to use for listen")
+	address := flag.String("a", "", "Address to use for listen")
+	flag.Parse()
+
+	return fmt.Sprintf("%v:%d", *address, *port)
+}
+
 func main() {
-	listenAddress := ":9101"
+	listenAddress := getListenAddress()
 	log.Println("Starting cloudinary-exporter")
 
 	exporter, err := exporter.NewExporter()
