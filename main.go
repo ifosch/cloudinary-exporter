@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"github.com/ifosch/cloudinary-exporter/pkg/exporter"
 )
@@ -21,8 +22,7 @@ func main() {
 	prometheus.MustRegister(exporter)
 
 	log.Println("Listening on", listenAddress)
-	// TODO Use promhttp instead of prometheus.Handler()
-	http.Handle("/metrics", prometheus.Handler())
+	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>
                 <head><title>Cloudinary Exporter</title></head>
