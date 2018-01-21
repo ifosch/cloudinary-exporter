@@ -95,8 +95,8 @@ func StorageLimit(usageReport UsageReport) float64 {
 	return float64(usageReport.Storage.Limit)
 }
 
-func StorageUsedPercent(usageReport UsageReport) float64 {
-	return float64(usageReport.Storage.UsedPercent)
+func StorageUsageRatio(usageReport UsageReport) float64 {
+	return float64(usageReport.Storage.UsedPercent / 100)
 }
 
 func BandwidthUsage(usageReport UsageReport) float64 {
@@ -107,8 +107,8 @@ func BandwidthLimit(usageReport UsageReport) float64 {
 	return float64(usageReport.Bandwidth.Limit)
 }
 
-func BandwidthUsedPercent(usageReport UsageReport) float64 {
-	return float64(usageReport.Bandwidth.UsedPercent)
+func BandwidthUsageRatio(usageReport UsageReport) float64 {
+	return float64(usageReport.Bandwidth.UsedPercent / 100)
 }
 
 func ObjectsUsage(usageReport UsageReport) float64 {
@@ -119,8 +119,8 @@ func ObjectsLimit(usageReport UsageReport) float64 {
 	return float64(usageReport.Objects.Limit)
 }
 
-func ObjectsUsedPercent(usageReport UsageReport) float64 {
-	return float64(usageReport.Objects.UsedPercent)
+func ObjectsUsageRatio(usageReport UsageReport) float64 {
+	return float64(usageReport.Objects.UsedPercent / 100)
 }
 
 func TransformationUsage(usageReport UsageReport) float64 {
@@ -131,6 +131,6 @@ func TransformationLimit(usageReport UsageReport) float64 {
 	return float64(usageReport.Transformations.Limit)
 }
 
-func TransformationUsedPercent(usageReport UsageReport) float64 {
-	return float64(usageReport.Transformations.UsedPercent)
+func TransformationUsageRatio(usageReport UsageReport) float64 {
+	return float64(usageReport.Transformations.UsedPercent / 100)
 }

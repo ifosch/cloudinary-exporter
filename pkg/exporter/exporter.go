@@ -17,21 +17,21 @@ type ReportDesc struct {
 }
 
 var ReportDescs = []ReportDesc{
-	ReportDesc{Name: "transformations_usage", Desc: "Transformation usage", Value: cloudinary.TransformationUsage},
-	ReportDesc{Name: "transformations_limit", Desc: "Transformation limit", Value: cloudinary.TransformationLimit},
-	ReportDesc{Name: "transformations_used_percent", Desc: "Transformation used percent", Value: cloudinary.TransformationUsedPercent},
-	ReportDesc{Name: "objects_usage", Desc: "Object usage", Value: cloudinary.ObjectsUsage},
-	ReportDesc{Name: "objects_limit", Desc: "Object limit", Value: cloudinary.ObjectsLimit},
-	ReportDesc{Name: "objects_used_percent", Desc: "Object used percent", Value: cloudinary.ObjectsUsedPercent},
-	ReportDesc{Name: "bandwidth_usage", Desc: "Bandwidth usage", Value: cloudinary.BandwidthUsage},
-	ReportDesc{Name: "bandwidth_limit", Desc: "Bandwidth limit", Value: cloudinary.BandwidthLimit},
-	ReportDesc{Name: "bandwidth_used_percent", Desc: "Bandwidth used percent", Value: cloudinary.BandwidthUsedPercent},
-	ReportDesc{Name: "storage_usage", Desc: "Storage usage", Value: cloudinary.StorageUsage},
-	ReportDesc{Name: "storage_limit", Desc: "Storage limit", Value: cloudinary.StorageLimit},
-	ReportDesc{Name: "storage_used_percent", Desc: "Storage used percent", Value: cloudinary.StorageUsedPercent},
-	ReportDesc{Name: "requests", Desc: "Requests", Value: cloudinary.Requests},
-	ReportDesc{Name: "resources", Desc: "Resources", Value: cloudinary.Resources},
-	ReportDesc{Name: "derived_resources", Desc: "Derived resources", Value: cloudinary.DerivedResources},
+	ReportDesc{Name: "transformations_usage_amount", Desc: "Number of used transformations in the last 30 days", Value: cloudinary.TransformationUsage},
+	ReportDesc{Name: "transformations_limit_amount", Desc: "Limit of transformations allowed in the last 30 days", Value: cloudinary.TransformationLimit},
+	ReportDesc{Name: "transformations_usage_ratio", Desc: "Ratio of used transformations over corresponding limit", Value: cloudinary.TransformationUsageRatio},
+	ReportDesc{Name: "objects_usage_amount", Desc: "Number of used objects in the last 30 days", Value: cloudinary.ObjectsUsage},
+	ReportDesc{Name: "objects_limit_amount", Desc: "Limit of objects allowed in the last 30 days", Value: cloudinary.ObjectsLimit},
+	ReportDesc{Name: "objects_usage_ratio", Desc: "Ratio of used objects over corresponding limit", Value: cloudinary.ObjectsUsageRatio},
+	ReportDesc{Name: "bandwidth_usage_bytes", Desc: "Bytes used in bandwidth in the last 30 days", Value: cloudinary.BandwidthUsage},
+	ReportDesc{Name: "bandwidth_limit_bytes", Desc: "Limit of bytes in bandwidth to use in the last 30 days", Value: cloudinary.BandwidthLimit},
+	ReportDesc{Name: "bandwidth_usage_ratio", Desc: "Ratio of used bytes in bandwidth over corresponding limit", Value: cloudinary.BandwidthUsageRatio},
+	ReportDesc{Name: "storage_usage_bytes", Desc: "Bytes of storage used in the last 30 days", Value: cloudinary.StorageUsage},
+	ReportDesc{Name: "storage_limit_bytes", Desc: "Limit of storage used allowed in the last 30 days", Value: cloudinary.StorageLimit},
+	ReportDesc{Name: "storage_usage_ratio", Desc: "Ratio of storage bytes used over corresponding limit", Value: cloudinary.StorageUsageRatio},
+	ReportDesc{Name: "requests_amount", Desc: "Number of requests done to Cloudinary", Value: cloudinary.Requests},
+	ReportDesc{Name: "resources_amount", Desc: "Number of resources in Cloudinary", Value: cloudinary.Resources},
+	ReportDesc{Name: "derived_resources_amount", Desc: "Number of derived resources in Cloudinary", Value: cloudinary.DerivedResources},
 }
 
 type Exporter struct {
