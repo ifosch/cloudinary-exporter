@@ -2,11 +2,9 @@ package cloudinary
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 )
 
 type UsageInfo struct {
@@ -27,19 +25,8 @@ type UsageReport struct {
 	DerivedResources int64     `json:"derived_resources"`
 }
 
-func getCredentials() (key, secret, cloudName string, err error) {
-	key = os.Getenv("CLOUDINARY_KEY")
-	secret = os.Getenv("CLOUDINARY_SECRET")
-	cloudName = os.Getenv("CLOUDINARY_CLOUD_NAME")
-
-	if key == "" || secret == "" || cloudName == "" {
-		err = errors.New("No credentials defined")
-	}
-	return key, secret, cloudName, err
-}
-
 func GetRequest() (req *http.Request, err error) {
-	key, secret, cloudName, err := getCredentials()
+	cloudName, key, secret := CloudinaryCredentials.get()
 	if err != nil {
 		return nil, err
 	}

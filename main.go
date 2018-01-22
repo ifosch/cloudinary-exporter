@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
+	"github.com/ifosch/cloudinary-exporter/pkg/cloudinary"
 	"github.com/ifosch/cloudinary-exporter/pkg/exporter"
 )
 
@@ -23,6 +25,15 @@ func getListenAddress() string {
 func main() {
 	listenAddress := getListenAddress()
 	log.Println("Starting cloudinary-exporter")
+
+	err := cloudinary.NewCredentials(
+		os.Getenv("CLOUDINARY_CLOUD_NAME"),
+		os.Getenv("CLOUDINARY_KEY"),
+		os.Getenv("CLOUDINARY_SECRET"),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	exporter, err := exporter.NewExporter()
 	if err != nil {
