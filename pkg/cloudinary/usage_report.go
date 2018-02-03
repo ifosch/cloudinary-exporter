@@ -52,6 +52,12 @@ func GetUsageReport(req *http.Request) (usageReport *UsageReport, err error) {
 	}
 	defer rs.Body.Close()
 
+	if rs.StatusCode != 200 {
+		return nil, fmt.Errorf(
+			"ERROR: Cloudinary API complained: %v",
+			rs.Header.Get("X-Cld-Error"),
+		)
+	}
 	bodyBytes, err := ioutil.ReadAll(rs.Body)
 	if err != nil {
 		return nil, err
