@@ -48,10 +48,19 @@ func GetUsageReport(req *http.Request) (usageReport *UsageReport, err error) {
 	client := http.Client{}
 	rs, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf(
+			"ERROR: Request failure: %v",
+			err,
+		)
 	}
 	defer rs.Body.Close()
 
+	if rs.StatusCode != 200 && rs.StatusCode != 201 {
+		return nil, fmt.Errorf(
+			"ERROR: Cloudinary API complained: %v",
+			rs.Header.Get("X-Cld-Error"),
+		)
+	}
 	bodyBytes, err := ioutil.ReadAll(rs.Body)
 	if err != nil {
 		return nil, err

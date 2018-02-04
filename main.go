@@ -24,7 +24,8 @@ func getListenAddress() string {
 
 func main() {
 	listenAddress := getListenAddress()
-	log.Println("Starting cloudinary-exporter")
+	l := log.New(os.Stderr, "", 1)
+	l.Println("Starting cloudinary-exporter")
 
 	err := cloudinary.NewCredentials(
 		os.Getenv("CLOUDINARY_CLOUD_NAME"),
@@ -32,17 +33,17 @@ func main() {
 		os.Getenv("CLOUDINARY_SECRET"),
 	)
 	if err != nil {
-		log.Fatal(err)
+		l.Fatal(err)
 	}
 
-	exporter, err := exporter.NewExporter()
+	exporter, err := exporter.NewExporter(l)
 	if err != nil {
-		log.Fatal(err)
+		l.Fatal(err)
 	}
 
 	prometheus.MustRegister(exporter)
 
-	log.Println("Listening on", listenAddress)
+	l.Println("Listening on", listenAddress)
 	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>
@@ -53,5 +54,5 @@ func main() {
                 </body>
                 </html>`))
 	})
-	log.Fatal(http.ListenAndServe(listenAddress, nil))
+	l.Fatal(http.ListenAndServe(listenAddress, nil))
 }

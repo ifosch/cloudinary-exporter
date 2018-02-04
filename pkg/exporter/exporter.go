@@ -2,6 +2,7 @@ package exporter
 
 import (
 	"log"
+	"os"
 
 	"github.com/prometheus/client_golang/prometheus"
 
@@ -36,9 +37,10 @@ var ReportDescs = []ReportDesc{
 
 type Exporter struct {
 	metrics []prometheus.Gauge
+	log     *log.Logger
 }
 
-func NewExporter() (*Exporter, error) {
+func NewExporter(validL *log.Logger) (*Exporter, error) {
 	metrics := []prometheus.Gauge{}
 	for _, desc := range ReportDescs {
 		metricDesc := prometheus.NewGauge(
@@ -51,8 +53,13 @@ func NewExporter() (*Exporter, error) {
 		)
 		metrics = append(metrics, metricDesc)
 	}
+	l := log.New(os.Stderr, "", 1)
+	if validL != nil {
+		l = validL
+	}
 	return &Exporter{
 		metrics: metrics,
+		log:     l,
 	}, nil
 }
 
@@ -65,7 +72,7 @@ func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 	err := e.fetch()
 	if err != nil {
-		log.Fatal(err)
+		e.log.Fatal(err)
 	}
 	for _, m := range e.metrics {
 		m.Collect(ch)
@@ -75,9 +82,11 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 func (e *Exporter) fetch() (err error) {
 	req, err := cloudinary.GetRequest()
 	if err != nil {
+		e.log.Println(err)
 		return err
 	}
 
+	e.log.Println("Data requested")
 	report, err := cloudinary.GetUsageReport(req)
 	if err != nil {
 		return err
