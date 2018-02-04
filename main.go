@@ -22,8 +22,6 @@ func getListenAddress() string {
 	return fmt.Sprintf("%v:%d", *address, *port)
 }
 
-var l *log.Logger
-
 func main() {
 	listenAddress := getListenAddress()
 	l := log.New(os.Stderr, "", 1)
