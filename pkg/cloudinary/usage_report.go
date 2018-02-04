@@ -55,7 +55,7 @@ func GetUsageReport(req *http.Request) (usageReport *UsageReport, err error) {
 	}
 	defer rs.Body.Close()
 
-	if rs.StatusCode != 200 {
+	if rs.StatusCode != 200 && rs.StatusCode != 201 {
 		return nil, fmt.Errorf(
 			"ERROR: Cloudinary API complained: %v",
 			rs.Header.Get("X-Cld-Error"),
