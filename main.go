@@ -36,7 +36,7 @@ func main() {
 		l.Fatal(err)
 	}
 
-	exporter, err := exporter.NewExporter(l)
+	exporter, err := exporter.NewExporter(l, os.Getenv("CLOUDINARY_CLOUD_NAME"))
 	if err != nil {
 		l.Fatal(err)
 	}
