@@ -40,7 +40,7 @@ type Exporter struct {
 	log     *log.Logger
 }
 
-func NewExporter(validL *log.Logger) (*Exporter, error) {
+func NewExporter(validL *log.Logger, cloudName string) (*Exporter, error) {
 	metrics := []prometheus.Gauge{}
 	for _, desc := range ReportDescs {
 		metricDesc := prometheus.NewGauge(
@@ -48,7 +48,7 @@ func NewExporter(validL *log.Logger) (*Exporter, error) {
 				Namespace:   "cloudinary",
 				Name:        desc.Name,
 				Help:        desc.Desc,
-				ConstLabels: nil,
+				ConstLabels: prometheus.Labels{"cloudName": cloudName},
 			},
 		)
 		metrics = append(metrics, metricDesc)
